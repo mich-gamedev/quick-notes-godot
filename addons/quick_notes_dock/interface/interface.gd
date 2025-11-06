@@ -44,7 +44,7 @@ func _setting_changed() -> void:
 
 func _on_edit_text_changed() -> void:
 	tab_preview.text = ""
-	var formatting : Dictionary[String, String] = {
+	var formatting : Dictionary = {
 		"- ": get_setting("formatting/replace_bullet_points_with"),
 		"[ ]": get_setting("formatting/replace_unchecked_boxes_with"),
 		"[x]": get_setting("formatting/replace_checked_boxes_with")

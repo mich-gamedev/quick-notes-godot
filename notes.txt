@@ -1,6 +1,8 @@
 - do the thing
 	- do this thing to complete the above
 	[x] this one is done
-	[ ] this one ain't
-[x] what the fish
-[x] this should save
+	[ ] this one isn't
+[x] [rainbow]what the fish[/rainbow]
+[x] saves to [code]res://notes.txt[/code] by default
+
+[img]res://icon.svg[/img]
