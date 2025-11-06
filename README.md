@@ -2,7 +2,7 @@
 
 Adds a dock to write quick, messy notes / to-dos
 
-Features:
+## Features
 - BBCode support
 - Auto formats bullet points and check-boxes
   - from `-`
