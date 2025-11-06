@@ -1,8 +1,18 @@
-[gd_scene load_steps=2 format=3 uid="uid://bf7qcsvak5qk1"]
+[gd_scene load_steps=4 format=3 uid="uid://bf7qcsvak5qk1"]
 
 [ext_resource type="Script" uid="uid://cefrnn8uk5nq0" path="res://addons/quick_notes_dock/interface/interface.gd" id="1_g1uf6"]
+[ext_resource type="Script" uid="uid://d1ue0neix6epg" path="res://addons/quick_notes_dock/interface/toast_message.gd" id="3_0hovd"]
 
-[node name="Panel" type="Panel"]
+[sub_resource type="DPITexture" id="DPITexture_uk00g"]
+_source = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\"><path fill=\"#e0e0e0\" d=\"M3 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4l-3-3h-1v6H3zm1 0v5h3V1zm4 8a1 1 0 0 1 0 4 1 1 0 0 1 0-4z\"/></svg>
+"
+color_map = {
+Color(1, 0.37254903, 0.37254903, 1): Color(1, 0.47, 0.42, 1),
+Color(0.37254903, 1, 0.5921569, 1): Color(0.45, 0.95, 0.5, 1),
+Color(1, 0.8666667, 0.39607844, 1): Color(1, 0.87, 0.4, 1)
+}
+
+[node name="QuickNotes" type="Panel"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -34,6 +44,8 @@ placeholder_text = "Replace with your notes :]
 
 P.S. lines starting with `-`, `[ ]`, and `[x]` will be formatted in the \"Preview\" tab
 
+Also supports [wave]BBCode[/wave]
+
 Version 1.0.0:
 	- Released the plugin <3"
 wrap_mode = 1
@@ -52,5 +64,26 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
+tooltip_text = "Save
+(Note: Will automatically run on close.)"
+icon = SubResource("DPITexture_uk00g")
+
+[node name="FontSize" type="SpinBox" parent="VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+tooltip_text = "Font size"
+value = 12.0
+rounded = true
+allow_greater = true
+suffix = "px"
+
+[node name="ToastMessage" type="Label" parent="VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+script = ExtResource("3_0hovd")
 
 [connection signal="text_changed" from="VBoxContainer/EditTabs/Edit" to="." method="_on_edit_text_changed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/Save" to="." method="_on_save_pressed"]
+[connection signal="value_changed" from="VBoxContainer/HBoxContainer/FontSize" to="." method="_on_font_size_value_changed"]

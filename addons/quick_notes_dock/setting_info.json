@@ -27,4 +27,9 @@
 		"type": 4,
 		"default": "[img height=16]res://addons/quick_notes_dock/icons/unchecked.svg[/img]"
 	},
+	{
+		"name": "plugin/quick_notes/display/font_size",
+		"type": 2,
+		"default": 16
+	}
 ]

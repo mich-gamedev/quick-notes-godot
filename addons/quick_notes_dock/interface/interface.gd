@@ -1,4 +1,4 @@
-@tool extends Panel
+@tool class_name QuickNotesDock extends Panel
 
 @onready var edit_tabs: TabContainer = %EditTabs
 @onready var editor_theme = EditorInterface.get_editor_theme()
@@ -6,10 +6,19 @@
 @onready var tab_edit: TextEdit = %Edit
 @onready var tab_preview: RichTextLabel = %Preview
 @onready var save: Button = %Save
+@onready var font_size: SpinBox = %FontSize
+
+@onready var plugin: QuickNotesEditorPlugin:
+	set(v):
+		if is_instance_valid(v):
+			plugin = v
+			plugin_supplied.emit()
+
+signal plugin_supplied
 
 
-
-func _ready() -> void:
+func _enter_tree() -> void:
+	await get_tree().process_frame
 	for i in edit_tabs.get_child_count():
 		match edit_tabs.get_child(i).name:
 			&"Edit":
@@ -19,8 +28,13 @@ func _ready() -> void:
 
 	save.icon = editor_theme.get_icon(&"Save", &"EditorIcons")
 	settings.settings_changed.connect(_setting_changed)
-	await get_tree().process_frame
-	_setting_changed()
+	if !plugin:
+		return
+	var file = FileAccess.open(plugin.get_setting("defaults/default_path"), FileAccess.READ)
+	edit_tabs.current_tab = plugin.get_setting("defaults/default_tab")
+	tab_edit.text = file.get_as_text()
+	_on_edit_text_changed()
+	font_size.value = plugin.get_setting("display/font_size")
 
 func _setting_changed() -> void:
 	if settings.get_setting("interface/editor/dock_tab_style"):
@@ -30,8 +44,14 @@ func _setting_changed() -> void:
 
 func _on_edit_text_changed() -> void:
 	tab_preview.text = ""
-	var formatting : Dictionary[String, String] = {"- ": get_setting("replace_bullet_points_with"), "[ ]": get_setting("replace_unchecked_boxes_with"), "[x]": get_setting("replace_checked_boxes_with")}
+	var formatting : Dictionary[String, String] = {
+		"- ": get_setting("formatting/replace_bullet_points_with"),
+		"[ ]": get_setting("formatting/replace_unchecked_boxes_with"),
+		"[x]": get_setting("formatting/replace_checked_boxes_with")
+	}
 	var lines := tab_edit.text.split("\n")
+	if tab_edit.text.is_empty():
+		lines = tab_edit.placeholder_text.split("\n")
 	for i in lines.size():
 		var new_line = lines[i]
 		var stripped = lines[i].lstrip(" 	")
@@ -47,4 +67,18 @@ func _on_edit_text_changed() -> void:
 
 
 func get_setting(s: String) -> Variant:
-	return settings.get_setting("plugin/quick_notes/formatting/" + s)
+	return settings.get_setting("plugin/quick_notes/" + s)
+
+
+func _on_save_pressed() -> void:
+	plugin.save()
+	%ToastMessage.toast("Saved to %s" % String(get_setting("defaults/default_path")).get_file())
+
+
+func _on_font_size_value_changed(value: float) -> void:
+	tab_preview["theme_override_font_sizes/normal_font_size"] = value
+	tab_preview["theme_override_font_sizes/bold_font_size"] = value
+	tab_preview["theme_override_font_sizes/bold_italics_font_size"] = value
+	tab_preview["theme_override_font_sizes/italics_font_size"] = value
+	tab_preview["theme_override_font_sizes/mono_font_size"] = value
+	settings.set_setting("plugin/quick_notes/display/font_size", value)
