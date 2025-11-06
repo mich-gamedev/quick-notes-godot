@@ -1,0 +1,30 @@
+[
+	{
+		"name": "plugin/quick_notes/defaults/default_path",
+		"type": 4,
+		"hint": 13,
+		"default": "res://notes.txt"
+	},
+	{
+		"name": "plugin/quick_notes/defaults/default_tab",
+		"type": 2,
+		"hint": 2,
+		"hint_string": "Edit,Preview",
+		"default": 0
+	},
+	{
+		"name": "plugin/quick_notes/formatting/replace_bullet_points_with",
+		"type": 4,
+		"default": "•"
+	},
+	{
+		"name": "plugin/quick_notes/formatting/replace_checked_boxes_with",
+		"type": 4,
+		"default": "[img height=16]res://addons/quick_notes_dock/icons/checked.svg[/img]"
+	},
+	{
+		"name": "plugin/quick_notes/formatting/replace_unchecked_boxes_with",
+		"type": 4,
+		"default": "[img height=16]res://addons/quick_notes_dock/icons/unchecked.svg[/img]"
+	},
+]

@@ -1,0 +1,56 @@
+[gd_scene load_steps=2 format=3 uid="uid://bf7qcsvak5qk1"]
+
+[ext_resource type="Script" uid="uid://cefrnn8uk5nq0" path="res://addons/quick_notes_dock/interface/interface.gd" id="1_g1uf6"]
+
+[node name="Panel" type="Panel"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_g1uf6")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="EditTabs" type="TabContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+tab_alignment = 2
+current_tab = 1
+
+[node name="Edit" type="TextEdit" parent="VBoxContainer/EditTabs"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+placeholder_text = "Replace with your notes :]
+
+P.S. lines starting with `-`, `[ ]`, and `[x]` will be formatted in the \"Preview\" tab
+
+Version 1.0.0:
+	- Released the plugin <3"
+wrap_mode = 1
+metadata/_tab_index = 0
+
+[node name="Preview" type="RichTextLabel" parent="VBoxContainer/EditTabs"]
+unique_name_in_owner = true
+layout_mode = 2
+bbcode_enabled = true
+metadata/_tab_index = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Save" type="Button" parent="VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+
+[connection signal="text_changed" from="VBoxContainer/EditTabs/Edit" to="." method="_on_edit_text_changed"]
